@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="h-100 h-custom" style="background-color: #242424; min-height:65vh;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="m-5">
+                  <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0" style="color:#FF953E;">Enter your information</h1>
+                  </div>
+                    {# information form #}
+                    <form class="form" id="informationForm" method="POST">
+                        {% csrf_token %}
+                        <div class=" d-flex justify-content-start">
+                            <div class="form-outline mb-4" style="max-width:250px;">
+                                <input type="text" name="first_name" maxlength="50" required id="id_first_name" class="form-control form-control-lg" placeholder="First name">
+                            </div>
+                            <div class="form-outline ms-4 mb-4" style="max-width:250px;">
+                                <input type="text" name="last_name" maxlength="50" required id="id_last_name" class="form-control form-control-lg" placeholder="Last name">
+                            </div>
+                        </div>
+                        <div class="form-outline mb-4" style="max-width:250px;">
+                          <input type="email" name="email" maxlength="254" required id="id_email" class="form-control form-control-lg" placeholder="Email">
+                        </div>
+                    </form>
+                  <hr class="my-5">
+                  <div class="mb-3 mt-5" style="width:300px">
+                    <div class="d-flex form-outline">
+                         <a href="{% url 'cart:cart_detail' %}"><button type="button" class="btn btn-outline-secondary btn-lg px-3" style="background-color:white; font-size: 15px; color:black">Back to cart</button></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 mt-5">
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Your order</h3>
+                  {# renders items from cart #}
+                    {% for item in cart %}
+                    {% with book=item.book %}
+                        <div class="d-flex flex-row justify-content-start">
+                              <div class="col-7">
+                                <h6 class="text-uppercase">{{ book.title }}</h6>
+                              </div>
+                            <div class="col-3">
+                                <h6>${{ item.price }}</h6>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                    {% endwith %}
+                    {% endfor %}
+                  {# checking if coupon exist #}
+                    {% if cart.coupon %}
+                     <div class="d-flex flex-row justify-content-start">
+                          <div class="col-7">
+                            <h6 class="text-uppercase">Coupon
+                             ({{ cart.coupon.discount }}% off)</h6>
+
+                          </div>
+                        <div class="col-3">
+                            <h6>${{ cart.get_discount|floatformat:2 }}</h6>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="d-flex flex-row justify-content-start mb-4">
+                        <div class="col-7">
+                          <h5 class="text-uppercase">Total price</h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>${{ cart.get_total_price_after_discount|floatformat:2 }}</h5>
+                        </div>
+                    </div>
+                    <div class="py-3">
+                        <div class="mb-2">
+                            <input type="checkbox" form="informationForm" required name="checkbox">I read <a href="#" class="text-decoration-none" style="color:#FF953E;">Privacy policy</a><br>
+                        </div>
+                        <input class="btn btn-outline-secondary btn-lg px-4" style="background-color:#FF953E;" type="submit" form="informationForm" value="Submit Order"/>
+                    </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

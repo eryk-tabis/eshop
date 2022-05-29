@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="h-100 h-custom" style="background-color: #242424; min-height:65vh;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px; min-height:52vh;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="m-5">
+                  <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0" style="color:#FF953E;">Your information</h1>
+                  </div>
+                    <h3>Name: {{ order.first_name }}</h3>
+                    <h3>Surname: {{ order.last_name }}</h3>
+                    <h3>Email: {{ order.email }}</h3>
+
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="p-5" >
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Your order</h3>
+                    {# renders items from order #}
+                    {% for item in order_item %}
+                    {% with book=item.book %}
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="text-uppercase">{{ book.title }}</h5>
+                            <h5>{{ item.price }}$</h5>
+                        </div>
+                    {% endwith %}
+                    {% endfor %}
+                  <hr class="my-4">
+                  <div class="d-flex justify-content-between mb-2">
+                    <h5 class="text-uppercase">Total price</h5>
+                    <h5>{{ total_cost }}$</h5>
+                  </div>
+                {# renders paypal button #}
+                {{ form.render }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+{% endblock %}

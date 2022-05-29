@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid col-xxl-12 px-5 py-5 text-white" style="background-color:#242424; min-height:65vh;">
+    <div class="row align-items-center g-3 py-5">
+        <div class="col-6 col-sm-4 col-lg-6">
+            <img src="{{ book.cover.url }}" class="d-block mx-lg-auto img-fluid" alt="Book Image" width="420px" height="420px" loading="lazy">
+        </div>
+        <div class="" style="max-width: 20vw">
+            <h1>{{ book.title }}</h1>
+            {# checking if discount exists #}
+              {% if book.discount_price is not Null %}
+                  <div class="h1 d-inline"><s class="text-muted ">${{ book.normal_price }}</s></div>
+                  <div class="h1 d-inline mx-3 ">{{ book.discount_price }}$</div>
+              {% else %}
+                <div class="h1">${{ book.normal_price }}</div>
+              {% endif %}
+            <p class="fw-bold lh-1 mb-3 my-3" style="word-wrap: break-word;">{{ book.description }}</p>
+            <p class="fw-bold lh-1 mb-3" style="word-wrap: break-word;">{{ book.description2 }}</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            {# checking if user can add book to a cart #}
+            {% if book not in request.user.owned_books.all or request.user.is_anonymous %}
+                <a href="{% url "cart:cart_add" book.id %}">
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-4" style="background-color:#FF953E; " >ADD TO CART</button>
+                </a>
+            {% else %}
+                  <button type="button" class="btn btn-outline-secondary btn-lg px-4" style="background-color:#FF953E; " disabled>ADD TO CART</button>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

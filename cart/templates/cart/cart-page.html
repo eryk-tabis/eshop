@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="" style="background-color: #242424; min-height:65vh;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-5">
+                  <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0" style="color:#FF953E;">Shopping Cart</h1>
+                  </div>
+                {# renders all item in cart #}
+                {% for item in cart %}
+                {% with book=item.book %}
+                  <hr class="my-4">
+
+                  <div class="row mb-4 d-flex justify-content-between align-items-center">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                      <img
+                        src="{{ book.cover.url }}"
+                        class="img-fluid rounded-3" alt="Book Cover">
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-xl-4">
+                      <h6 class="text-black mb-0">{{ book.title }}</h6>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-4 offset-lg-1">
+                      <h6 class="mb-0">${{ item.price }}</h6>
+                    </div>
+                      <div class="col-md-1 col-lg-1 col-xl-1">
+                      <a href="{% url "cart:cart_remove" book.id %}" class="text-muted"><img src="{% static 'img/close-icon.png' %}" width="30px" height="30px" class="fas fa-times" alt="Remove button"></a>
+                    </div>
+                  </div>
+                    {% endwith %}
+                    {% endfor %}
+                <h5 class="text-uppercase mb-3 pt-4">Enter your code</h5>
+                    <div class="mb-3" style="width:20vw">
+                        <div class="d-flex form-outline">
+                            {# coupon form #}
+                            <form action="{% url "coupons:apply" %}" method="POST" class="d-flex form-outline">
+                                {% csrf_token %}
+                              <input type="text" id="id_code" name="code" class="form-control form-control-lg d-inline"/>
+                                <button type="submit" class="btn btn-outline-secondary btn-lg px-4" style="background-color:#FF953E;">Apply</button>
+                            </form>
+                        </div>
+                      </div>
+                  <hr class="my-4">
+
+                  <h5 class="text-uppercase mb-3"></h5>
+
+                  <div class="mb-3 mt-5" style="width:300px">
+                    <div class="d-flex form-outline">
+                         <a href="{% url 'training_programs_view' %}"><button type="button" class="btn btn-outline-secondary btn-lg px-3" style="background-color:white; font-size: 15px; color:black">Back to shopping</button></a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-lg-4 mt-5">
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                    {# renders summary of items in a cart #}
+                    {% for item in cart %}
+                    {% with book=item.book %}
+                    <div class="d-flex flex-row justify-content-start">
+                          <div class="col-7">
+                            <h6 class="text-uppercase">{{ book.title }}</h6>
+                          </div>
+                        <div class="col-3">
+                            <h6>${{ item.price }}</h6>
+                        </div>
+
+                    </div>
+                    <hr class="my-4">
+                    {% endwith %}
+                    {% endfor %}
+                    {# cheking if coupon exists #}
+                    {% if cart.coupon %}
+                     <div class="d-flex flex-row justify-content-start">
+                          <div class="col-7">
+                            <h6 class="text-uppercase">Coupon
+                             ({{ cart.coupon.discount }}% off)</h6>
+
+                          </div>
+                        <div class="col-3">
+                            <h6>${{ cart.get_discount|floatformat:2 }}</h6>
+                        </div>
+                    </div>
+                    {% endif %}
+                <div class="d-flex justify-content-start">
+                <div class="col-7">
+                    <h5 class="text-uppercase">Total price</h5>
+                </div>
+                <div class="col-3">
+                    <h6>${{ cart.get_total_price_after_discount|floatformat:2 }}</h6>
+                </div>
+                </div>
+                <a href="{% url 'order_create' %}"><button type="button" class="btn btn-outline-secondary btn-lg px-4" style="background-color:#FF953E;">ORDER NOW</button></a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+{% endblock %}

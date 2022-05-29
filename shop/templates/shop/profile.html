@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div style="background-color:#242424; min-height: 80vh">
+    {# styling for picture in background #}
+    <div style="
+            background-image: url({% static 'img/gym2.jpg' %});
+            background-position: 95% 5%;
+            background-repeat: no-repeat;
+            z-index: 100;
+            background-size: 60% 60%;">
+        <div class="row py-5 mx-5" style="z-index: auto">
+          <div class="col-lg-5">
+            <div class="mb-2 border-0">
+              <div class=" text-left">
+                <h1 class="my-3 text-light">{{ request.user.username }}</h1>
+                <h3 class="text-muted mb-1">{{ request.user.email }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="" style=" z-index: 5;">
+              <div class="" >
+                <div class="album py-0">
+                    <div class="d-flex py-lg-0 my-0 px-2">
+                      <div class=" col-lg-5 col-md-5 ">
+                        <h1 class="fw-light px-5" style="color:#FF953E;">Your training programs</h1>
+                        <hr class="px-3" style="height:4px;border-width:0;color:gray;background-color:#FF953E">
+                      </div>
+                    </div>
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 g-5  ms-3" style="max-width: 65vw; min-height: 40vh">
+                      {# renders books from requested user #}
+                      {% for book in request.user.owned_books.all %}
+                      <a href="{{ book.program.url }}" class="nav-link  link-light" target="_blank">
+                        <div class="col">
+                          <div class="card mb-3 bg-dark ms-4">
+                            <img class="card-img-top" src="{{ book.cover.url }}" alt="Book Image">
+                            <div class="card-body bg-dark">
+                              <p class="card-text text-light">{{ book.title }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                      {% endfor %}
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

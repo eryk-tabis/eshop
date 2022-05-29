@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="album py-3" style="background-color:#242424; min-height:63vh;">
+    <div class="container">
+        <div class="d-flex py-lg-2 my-3 px-2">
+          <div class=" col-lg-4 col-md-5 ">
+            <h1 class="fw-light px-5" style="color:#FF953E;">Training programs</h1>
+            <hr class="px-3" style="height:4px;border-width:0;color:gray;background-color:#FF953E">
+          </div>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 g-2" style="max-width: 85vw;">
+          {# renders all books from db #}
+          {% for book in books %}
+          <a href="{{ book.slug }}" class="nav-link mx-0 link-light">
+            <div class="col mx-4">
+              <div class="card pb-3 bg-dark">
+                <img class="card-img-top" width="275px" height="325px" src="{{ book.cover.url }}" alt="Book Image">
+                <div class="card-body bg-dark">
+                  <p class="card-text text-light">{{ book.title }}</p>
+                  <div class="d-flex align-items-center">
+                    {# checking if discount price exists #}
+                    {% if book.discount_price is not Null %}
+                      <small class="text-muted"><s>${{ book.normal_price }}</s></small>
+                      <small class="px-3">${{ book.discount_price }}</small>
+                    {% else %}
+                      <small class="">${{ book.normal_price }}</small>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            </a>
+          {% endfor %}
+        </div>
+    </div>
+  </div>
+{% endblock %}
